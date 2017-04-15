@@ -18,14 +18,28 @@ GIM <- function(out, full=TRUE, B, B2, cluster = NA, time = NA){
     if(full==TRUE){
         gim.out <- bootstrapIM(out, B, B2,cluster=NA, time=NA)
     }
-    coefs <- out$coefficients
-    classic.se <- sqrt(diag(vcov(out)))
-    robust.model <- as.matrix(lmtest::coeftest(out, vcov=sandwich::vcovHC))
-    robust.se <- robust.model[,2]
-    ests <- matrix(c(coefs,classic.se,robust.se,robust.model[,3],robust.model[,4]),ncol=5)
-    rownames(ests) <- names(coefs)
-    colnames(ests) <- c("Estimate", "Std. Err.", "Robust Std. Err.","z value","Pr(>|z|)")
-    ROT <- max(robust.se/classic.se)
+    if(length(cluster<2 & length(time<2))){
+        coefs <- out$coefficients
+        classic.se <- sqrt(diag(vcov(out)))
+        robust.model <- as.matrix(lmtest::coeftest(out, vcov=sandwich::vcovHC))
+        robust.se <- robust.model[,2]
+        ests <- matrix(c(coefs,classic.se,robust.se,robust.model[,3],robust.model[,4]),ncol=5)
+        rownames(ests) <- names(coefs)
+        colnames(ests) <- c("Estimate", "Std. Err.", "Robust Std. Err.","z value","Pr(>|z|)")
+        ROT <- max(robust.se/classic.se)
+    }
+    if(length(cluster>=2)){
+        coefs <- out$coefficients
+        classic.se <- sqrt(diag(vcov(out)))
+        clust.vcov <- clust.robust(out, cluster)
+        robust.model <- as.matrix(lmtest::coeftest(out, vcov=clust.vcov))
+        robust.se <- robust.model[,2]
+        ests <- matrix(c(coefs,classic.se,robust.se,robust.model[,3],robust.model[,4]),ncol=5)
+        rownames(ests) <- names(coefs)
+        colnames(ests) <- c("Estimate", "Std. Err.", "Robust Std. Err.","z value","Pr(>|z|)")
+        ROT <- max(robust.se/classic.se)
+    }
+
 
     if(exists("gim.out") == FALSE){
         if(ROT >= 1.5){

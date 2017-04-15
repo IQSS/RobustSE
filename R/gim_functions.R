@@ -21,9 +21,7 @@ bootstrapIM <- function(lm1, B, B2,cluster=NA, time=NA){
         sigma <- sum(lm1$residuals^2)/(nrow(model.matrix(lm1))-ncol(model.matrix(lm1)))
         grad <- apply(cbind(y,model.matrix(lm1)),1,function(x) maxLik::numericGradient(ll.normal.bsIM, beta, y=x[1], X=x[2:length(x)], sigma=sigma))
     }
-    else{
-        grad <- unname(t(sandwich::estfun(lm1)))
-    }
+
     if(length(cluster)<2 & length(time)<2){
         meat <- grad%*%t(grad)
         bread <- -solve(vcov(lm1))
@@ -34,6 +32,14 @@ bootstrapIM <- function(lm1, B, B2,cluster=NA, time=NA){
         #print(paste("First", diag(solve(bread)%*%meat%*%solve(bread))))
         #print(paste("Second", diag(vcovHC(lm1, type="HC0"))))
     }
+
+    if(length(cluster)>=2){
+        bread <- -solve(vcov(lm1))
+        meat <- meat.clust(lm1, data, cluster)
+        matri <- nrow(X)^(-1/2)*(meat + bread)
+        Dhat <- as.vector(matri[lower.tri(matri, diag = TRUE)])
+    }
+
     if(length(time)>1){
         bread <- -solve(vcov(lm1))
         bread2 <- t(X)%*%X
