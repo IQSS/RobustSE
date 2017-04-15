@@ -1,9 +1,11 @@
 Package: RobustSE
-Title: What the Package Does (one line, title case)
+Title: Tests for model misspecification using GIM test and robust standard errors
 Version: 0.0.0.9000
 Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-Depends: R (>= 3.3.3)
+Description: Implements GIM test from King and Roberts (2015) in Political Analysis to detect 
+    misspecification in various regression models using robust variance-covariance matrix.
+    Also uses a general rule of thumb to alert users of high likelihood of model 
+    misspecification without running full GIM test.
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
