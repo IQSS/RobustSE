@@ -16,9 +16,9 @@
 
 GIM <- function(out, full=TRUE, B, B2, cluster = NA, time = NA){
     if(full==TRUE){
-        gim.out <- bootstrapIM(out, B, B2,cluster=NA, time=NA)
+        gim.out <- bootstrapIM(out, B, B2, cluster=cluster, time=time)
     }
-    if(length(cluster<2 & length(time<2))){
+    if(length(cluster)<2 & length(time)<2){
         coefs <- out$coefficients
         classic.se <- sqrt(diag(vcov(out)))
         robust.model <- as.matrix(lmtest::coeftest(out, vcov=sandwich::vcovHC))
@@ -28,7 +28,8 @@ GIM <- function(out, full=TRUE, B, B2, cluster = NA, time = NA){
         colnames(ests) <- c("Estimate", "Std. Err.", "Robust Std. Err.","z value","Pr(>|z|)")
         ROT <- max(robust.se/classic.se)
     }
-    if(length(cluster>=2)){
+
+    if(length(cluster)>=2){
         coefs <- out$coefficients
         classic.se <- sqrt(diag(vcov(out)))
         clust.vcov <- clust.robust(out, cluster)
