@@ -256,7 +256,7 @@ bootstrapIM <- function(lm1, B, B2, cluster=NA, time=NA){
         }
     }
 
-    if(grepl("Negative Binomial", family(reg)$family) == TRUE){
+    if(grepl("Negative Binomial", family(lm1)$family) == TRUE){
 
         X <- model.matrix(lm1)
         y <- unname(lm1$y)

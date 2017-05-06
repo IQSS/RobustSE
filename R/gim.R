@@ -44,20 +44,20 @@ GIM <- function(out, full=TRUE, B, B2, cluster = NA, time = NA){
 
     if(exists("gim.out") == FALSE){
         if(ROT >= 1.5){
-            print(paste("Max ratio of robust to classic standard errors is", ROT,sep = " "))
+            print(paste("Max ratio of robust to classic standard errors is", round(ROT,3),sep = " "))
             print("Rule of thumb suggests your model is misspecified, it is suggested that you run the full GIM test")
         }
 
         else{
-            print(paste("Max ratio of robust to classic standard errors is", ROT,sep = " "))
+            print(paste("Max ratio of robust to classic standard errors is", round(ROT,3),sep = " "))
             print("Rule of thumb suggests your model is NOT misspecified")
         }
 
-        return(list("Coefficients" = ests, "Rule of Thumb" = ROT))
+        return(list("Coefficients" = ests, "Rule of Thumb" = round(ROT,3)))
     }
 
     else{
-        return(list("Coefficients" = ests, "Rule of Thumb" = ROT, "GIM test statistic" = gim.out$stat, "GIM pval" = gim.out$pval))
+        return(list("Coefficients" = ests, "Rule of Thumb" = round(ROT,3), "GIM test statistic" = gim.out$stat, "GIM pval" = gim.out$pval))
     }
 
 }
