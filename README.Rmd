@@ -1,6 +1,20 @@
 # RobustSE
 
-The goal of RobustSE is to ...
+The RobustSE package implements the generalized information matrix
+(GIM) test to detect model misspecification described by [King & Roberts (2015)](https://gking.harvard.edu/files/gking/files/robust_0.pdf). 
+
+When a researcher suspects a model may be misspecified, rather than attempting to correct by fitting robust standard errors, the GIM test should be utilized as a formal statistical test for model misspecification. If the GIM test rejects the null hypothesis, the researcher should re-specify the model, as it is possible estimators of the misspecified model will be biased.
+
+The `GIM()` function in the RobustSE package can be used to derive a quick rule of thumb estimate for whether or not a model is misspecified by comparing the size of classic and robust standard errors, as well as perform the full GIM test for linear, Poisson, and Negative binomial regressions.
+
+The `GIM()` function accepts `glm(..., family = gaussian(link="identity"))`, `glm(..., family = "poisson")`, and `glm.nb(...)` objects as input. It is suggested that the researcher first perform the quick rule of thumb evaluation for model misspecification on their desired model by setting `full = FALSE`. In this case, `GIM()` will return the estimated coefficients, classic standard errors, robust standard errors, z-values, p-values with respect to the robust standard errors, and the rule of thumb for misspecification. If the rule of thumb is greater than 1.5 (i.e. any robust standard error is 1.5 times larger than its classic standard error), the output suggests there may be misspecification and to perform the full GIM test on the fitted model.
+
+The full GIM test can be performed by setting `full = TRUE`. In this scenario, the researcher must also set the number of bootstraps for each part of the double bootstrap (`B` and `B2`) that makes up the full GIM test. The full GIM test returns the same things as the quick test above, as well as the GIM test statistic and the GIM test p-value. If the GIM test null hypothesis is rejected, this is a signal of model misspecification and the reseacher should consider re-specifying the model. 
+
+If the researcher believes it is appropriate to use cluster-robust standard errors, `GIM()` can handle this as well for both the rule of thumb test and the full test by setting `cluster = data$cluster` and the same parameters described above. In this scenario, both the rule of thumb and the full test return the same things, except the reported robust standard errors are cluster-robust standard errors.
+
+
+
 
 ## Installation
 
