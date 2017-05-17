@@ -46,7 +46,7 @@ GIM(pois, full = TRUE, B = 30, B2 = 25, cluster = epil$subject)
 
 # Negative binomial regression modeling seizure counts for epileptics
 neg.bin <- glm.nb(y ~ trt + base + age + V4 + lbase + lage,
-            data = epil)
+                  data = epil)
 
 # Quick rule of thumb for model misspecification
 GIM(neg.bin, full = FALSE)

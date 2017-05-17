@@ -16,8 +16,20 @@
 
 GIM <- function(out, full=TRUE, B, B2, cluster = NA, time = NA){
     if(full==TRUE){
-        gim.out <- bootstrapIM(out, B, B2, cluster=cluster, time=time)
+        if(family(out)$family == 'gaussian')
+        {
+            gim.out <- bootstrapIM.gaussian(out, B, B2, cluster=cluster, time=time)
+        }
+        else if(family(out)$family == 'poisson')
+        {
+            gim.out <- bootstrapIM.poisson(out, B, B2, cluster=cluster, time=time)
+        }
+        else if(grepl("Negative Binomial", family(out)$family) == TRUE)
+        {
+            gim.out <- bootstrapIM.negbin(out, B, B2, cluster=cluster, time=time)
+        }
     }
+
     if(length(cluster)<2 & length(time)<2){
         coefs <- out$coefficients
         classic.se <- sqrt(diag(vcov(out)))
