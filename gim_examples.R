@@ -21,6 +21,49 @@ GIM(ols, full = FALSE, cluster = Fatality$state)
 GIM(ols, full = TRUE, B = 30, B2 = 25, cluster = Fatality$state)
 
 #=====================================================================
+# install.packages("MASS")
+library(MASS)
+data(Pima.te)
+
+logit <- glm(type ~ age + npreg + glu + bp + skin + bmi,
+             data = Pima.te, family = binomial("logit"))
+
+# Quick rule of thumb for model misspecification
+GIM(logit, full = FALSE)
+
+# Full GIM test for model misspecification
+GIM(logit, full = TRUE, B = 30, B2 = 25)
+
+# arbitrary cluster to test clustering
+Pima.te$cluster <- as.factor(sample(1:20, nrow(Pima.te), replace = TRUE))
+
+# Quick rule of thumb for model misspecification; data clustered by subject
+GIM(logit, full = FALSE, cluster = Pima.te$cluster)
+
+# Full GIM test for model misspecification; data clustered by subject
+GIM(logit, full = TRUE, B = 30, B2 = 25, cluster = Pima.te$cluster)
+
+#=====================================================================
+
+probit <- glm(type ~ age + npreg + glu + bp + skin + bmi,
+             data = Pima.te, family = binomial("probit"))
+
+# Quick rule of thumb for model misspecification
+GIM(probit, full = FALSE)
+
+# Full GIM test for model misspecification
+GIM(probit, full = TRUE, B = 30, B2 = 25)
+
+# arbitrary cluster to test clustering
+Pima.te$cluster <- as.factor(sample(1:20, nrow(Pima.te), replace = TRUE))
+
+# Quick rule of thumb for model misspecification; data clustered by subject
+GIM(probit, full = FALSE, cluster = Pima.te$cluster)
+
+# Full GIM test for model misspecification; data clustered by subject
+GIM(probit, full = TRUE, B = 30, B2 = 25, cluster = Pima.te$cluster)
+
+#=====================================================================
 
 # install.packages("MASS")
 library(MASS)

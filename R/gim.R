@@ -20,6 +20,14 @@ GIM <- function(out, full=TRUE, B, B2, cluster = NA, time = NA){
         {
             gim.out <- bootstrapIM.gaussian(out, B, B2, cluster=cluster, time=time)
         }
+        else if(family(out)$family == 'binomial' & family(out)$link == "logit")
+        {
+            gim.out <- bootstrapIM.logit(out, B, B2, cluster=cluster, time=time)
+        }
+        else if(family(out)$family == 'binomial' & family(out)$link == "probit")
+        {
+            gim.out <- bootstrapIM.probit(out, B, B2, cluster=cluster, time=time)
+        }
         else if(family(out)$family == 'poisson')
         {
             gim.out <- bootstrapIM.poisson(out, B, B2, cluster=cluster, time=time)

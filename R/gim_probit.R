@@ -1,4 +1,4 @@
-bootstrapIM.poisson <- function(lm1, B, B2, cluster=NA, time=NA)
+bootstrapIM.probit <- function(lm1, B, B2, cluster=NA, time=NA)
 {
     X <- model.matrix(lm1)
     y <- unname(lm1$y)
@@ -8,7 +8,7 @@ bootstrapIM.poisson <- function(lm1, B, B2, cluster=NA, time=NA)
     X <- X[,ok]
     beta <- lm1$coefficients[ok]
 
-    mu <- exp(X%*%beta)
+    p <- pnorm(X%*%beta)
     grad <- sandwich::estfun(lm1)
 
     if(length(cluster)<2){
@@ -29,8 +29,8 @@ bootstrapIM.poisson <- function(lm1, B, B2, cluster=NA, time=NA)
     Dbar <- rep(0, length(Dhat))
 
     for(i in 1:B){
-        yB <- rpois(nrow(data), lambda=mu)
-        lm1B <- glm(yB ~ model.matrix(lm1)[,-1], family="poisson")
+        yB <- rbinom(nrow(data), 1, prob = p)
+        lm1B <- glm(yB ~ model.matrix(lm1)[,-1], family=binomial("probit"))
         ok <- !is.na(lm1B$coefficients)
         X <- model.matrix(lm1B)[,ok]
 
@@ -53,8 +53,8 @@ bootstrapIM.poisson <- function(lm1, B, B2, cluster=NA, time=NA)
 
         #Bootstrap for VB of B
         for(j in 1:B2){
-            yB2 <- rpois(nrow(data), mu)
-            lm1B2 <- glm(yB2 ~ model.matrix(lm1)[,-1], family="poisson")
+            yB2 <- rbinom(nrow(data), 1, prob = p)
+            lm1B2 <- glm(yB2 ~ model.matrix(lm1)[,-1], family=binomial("probit"))
             ok <- !is.na(lm1B2$coefficients)
             XB2 <- model.matrix(lm1B2)[,ok]
 
