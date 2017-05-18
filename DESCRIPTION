@@ -9,10 +9,13 @@ Description: Implements GIM test from King and Roberts (2015) in Political Analy
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat
-Imports: lmtest,
+Suggests: 
+    testthat
+Imports: 
+    lmtest,
     car,
     sandwich,
+    stats,
     maxLik,
     MASS
 RoxygenNote: 6.0.1

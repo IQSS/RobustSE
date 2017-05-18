@@ -25,3 +25,9 @@ Takes in glm output, performs GIM test, returns estimated coefficients,
   classic standard errors, robust standard errors, rule of thumb for
   misspecified model, GIM test statistic and p-value.
 }
+\examples{
+# estimate model
+out <- glm(Sepal.Length ~ ., data = iris)
+GIM(out)
+
+}

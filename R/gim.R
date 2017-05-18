@@ -4,7 +4,6 @@
 #'   classic standard errors, robust standard errors, rule of thumb for
 #'   misspecified model, GIM test statistic and p-value.
 #'
-#' @name GIM
 #' @param out : Output from glm function
 #' @param full : TRUE if you want to perform the full GIM test, FALSE if you want to
 #' quickly check if your model is misspecified
@@ -12,9 +11,22 @@
 #' @param B2 : Number of bootstraps for each new dataset
 #' @param cluster : For clustered data
 #' @param time : For time series data
+#'
+#' @examples
+#' # estimate model
+#' out <- glm(Sepal.Length ~ ., data = iris)
+#' GIM(out)
+#'
+#' @importFrom stats family vcov
+#'
 #' @export
 
 GIM <- function(out, full=TRUE, B, B2, cluster = NA, time = NA){
+
+    # check for glm
+    if (!("glm" %in% class(out))) stop('glm required for estimation',
+                                       call. = FALSE)
+
     if(full==TRUE){
         if(family(out)$family == 'gaussian')
         {

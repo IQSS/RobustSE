@@ -1,5 +1,7 @@
 # RobustSE
 
+[![Travis-CI Build Status](https://travis-ci.org/IQSS/RobustSE.svg?branch=master)](https://travis-ci.org/IQSS/RobustSE)
+
 The RobustSE package implements the generalized information matrix
 (GIM) test to detect model misspecification described by [King & Roberts (2015)](https://gking.harvard.edu/files/gking/files/robust_0.pdf). 
 
