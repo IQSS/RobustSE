@@ -9,7 +9,7 @@ When a researcher suspects a model may be misspecified, rather than attempting t
 
 The `GIM()` function in the RobustSE package can be used to derive a quick rule of thumb estimate for whether or not a model is misspecified by comparing the size of classic and robust standard errors, as well as perform the full GIM test for linear, Poisson, and Negative binomial regressions.
 
-The `GIM()` function accepts `glm(..., family = gaussian(link="identity"))`, `glm(..., family = "poisson")`, and `glm.nb(...)` objects as input. It is suggested that the researcher first perform the quick rule of thumb evaluation for model misspecification on their desired model by setting `full = FALSE`. In this case, `GIM()` will return the estimated coefficients, classic standard errors, robust standard errors, z-values, p-values with respect to the robust standard errors, and the rule of thumb for misspecification. If the rule of thumb is greater than 1.5 (i.e. any robust standard error is 1.5 times larger than its classic standard error), the output suggests there may be misspecification and to perform the full GIM test on the fitted model.
+The `GIM()` function accepts `glm(..., family = gaussian(link="identity"))`, `glm(..., family=binomial)` with logit and probit links, `glm(..., family = "poisson")`, and `glm.nb(...)` objects as input. It is suggested that the researcher first perform the quick rule of thumb evaluation for model misspecification on their desired model by setting `full = FALSE`. In this case, `GIM()` will return the estimated coefficients, classic standard errors, robust standard errors, z-values, p-values with respect to the robust standard errors, and the rule of thumb for misspecification. If the rule of thumb is greater than 1.5 (i.e. any robust standard error is 1.5 times larger than its classic standard error), the output suggests there may be misspecification and to perform the full GIM test on the fitted model.
 
 The full GIM test can be performed by setting `full = TRUE`. In this scenario, the researcher must also set the number of bootstraps for each part of the double bootstrap (`B` and `B2`) that makes up the full GIM test. The full GIM test returns the same things as the quick test above, as well as the GIM test statistic and the GIM test p-value. If the GIM test null hypothesis is rejected, this is a signal of model misspecification and the reseacher should consider re-specifying the model. 
 
@@ -29,8 +29,49 @@ devtools::install_github("IQSS/RobustSE")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+NOTE: In order for standard errors to be calcualted correctly GLM objects must be used.
 
+OLS with and without clustering
 ```{r example}
-## basic example code
+# install.packages("Ecdat")
+library(Ecdat)
+data(Fatality)
+
+# ols modeling traffic fatality rate
+ols <- glm(mrall ~ beertax + factor(year), data=Fatality)
+
+# Quick rule of thumb for model misspecification
+GIM(ols, full = FALSE)
+
+# Full GIM test for model misspecification
+GIM(ols, full = TRUE, B = 30, B2 = 25)
+
+# Quick rule of thumb for model misspecification; data clustered by state
+GIM(ols, full = FALSE, cluster = Fatality$state)
+
+# Full GIM test for model misspecification; data clustered by state
+GIM(ols, full = TRUE, B = 30, B2 = 25, cluster = Fatality$state)
+```
+
+Poisson regression with and without clustering
+```{r example 2}
+# install.packages("MASS")
+library(MASS)
+data(epil)
+
+# Poisson regression modeling seizure counts for epileptics
+pois <- glm(y ~ trt + base + age + V4 + lbase + lage,
+            data = epil, family = "poisson")
+
+# Quick rule of thumb for model misspecification
+GIM(pois, full = FALSE)
+
+# Full GIM test for model misspecification
+GIM(pois, full = TRUE, B = 30, B2 = 25)
+
+# Quick rule of thumb for model misspecification; data clustered by subject
+GIM(pois, full = FALSE, cluster = epil$subject)
+
+# Full GIM test for model misspecification; data clustered by subject
+GIM(pois, full = TRUE, B = 30, B2 = 25, cluster = epil$subject)
 ```

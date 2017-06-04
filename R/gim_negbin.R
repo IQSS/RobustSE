@@ -28,6 +28,8 @@ bootstrapIM.negbin <- function(lm1, B, B2, cluster=NA, time=NA)
     D <- list()
     Dbar <- rep(0, length(Dhat))
 
+    pb = txtProgressBar(min = 1, max = B, initial = 1)
+
     for(i in 1:B){
         yB <- rnegbin(nrow(data), lambda, alpha)
         XB <- X[!is.na(yB),]
@@ -82,10 +84,10 @@ bootstrapIM.negbin <- function(lm1, B, B2, cluster=NA, time=NA)
         #invVBb <- invcov.shrink(VBb)
         invVBb <- MASS::ginv(VBb)
         T[i] <- t(D[[i]])%*%invVBb%*%D[[i]]
-        print(i)
-        print(T[i])
-        if(i%%10==0) print(i)
-
+        #print(i)
+        #print(T[i])
+        #if(i%%10==0) print(i)
+        setTxtProgressBar(pb,i)
     }
 
     Dbar <- Dbar/B

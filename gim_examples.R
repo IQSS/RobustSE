@@ -5,8 +5,7 @@ library(Ecdat)
 data(Fatality)
 
 # ols modeling traffic fatality rate
-ols <- glm(mrall ~ beertax + factor(year), data=Fatality,
-           family = gaussian(link="identity"))
+ols <- glm(mrall ~ beertax + factor(year), data=Fatality)
 
 # Quick rule of thumb for model misspecification
 GIM(ols, full = FALSE)

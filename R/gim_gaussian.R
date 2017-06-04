@@ -58,6 +58,8 @@ bootstrapIM.gaussian <- function(lm1, B, B2, cluster=NA, time=NA)
     D <- list()
     Dbar <- rep(0, length(Dhat))
 
+    pb = txtProgressBar(min = 1, max = B, initial = 1)
+
     for(i in 1:B){
 
         yB <- rnorm(nrow(data), mu, sqrt(sigma))
@@ -152,8 +154,9 @@ bootstrapIM.gaussian <- function(lm1, B, B2, cluster=NA, time=NA)
         VBb <- VBb/(B2-1)
         invVBb <- MASS::ginv(VBb)
         T[i] <- t(D[[i]])%*%invVBb%*%D[[i]]
-        print(i)
-        print(T[i])
+        #print(i)
+        #print(T[i])
+        setTxtProgressBar(pb,i)
     }
 
     Dbar <- Dbar/B

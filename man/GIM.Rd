@@ -26,8 +26,24 @@ Takes in glm output, performs GIM test, returns estimated coefficients,
   misspecified model, GIM test statistic and p-value.
 }
 \examples{
-# estimate model
-out <- glm(Sepal.Length ~ ., data = iris)
-GIM(out)
+# estimate ols model
+# install.packages("Ecdat")
+library(Ecdat)
+data(Fatality)
+
+# ols modeling traffic fatality rate
+ols <- glm(mrall ~ beertax + factor(year), data=Fatality)
+
+# Quick rule of thumb for model misspecification
+GIM(ols, full = FALSE)
+
+# Full GIM test for model misspecification
+GIM(ols, full = TRUE, B = 30, B2 = 25)
+
+# Quick rule of thumb for model misspecification; data clustered by state
+GIM(ols, full = FALSE, cluster = Fatality$state)
+
+# Full GIM test for model misspecification; data clustered by state
+GIM(ols, full = TRUE, B = 30, B2 = 25, cluster = Fatality$state)
 
 }
