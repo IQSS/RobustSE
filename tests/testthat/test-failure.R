@@ -62,6 +62,8 @@ test_that("PASS TEST: no strange robust standard errors",{
     # Quick rule of thumb for model misspecification; data clustered by subject
     nb.cl <- GIM(neg.bin, full = FALSE, cluster = epil$subject)$'Rule of Thumb'
 
+    # test to see that ratio of standard errors is a reasonable size
+
     expect_that(ols.hc, is_more_than(.85))
     expect_that(ols.cl, is_more_than(.85))
     expect_that(logit.hc, is_more_than(.85))
