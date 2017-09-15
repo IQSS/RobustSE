@@ -6,7 +6,11 @@ ll.normal.bsIM <- function(par,y,X, sigma){
     -1/2 * (sum(log(sigma2) + (y -(X%*%beta))^2/sigma2))
 }
 
-bootstrapIM.gaussian <- function(lm1, B, B2, cluster=NA, time=NA)
+#' @importFrom plm plm
+#' @importFrom stats formula model.matrix rnorm
+#' @importFrom utils txtProgressBar
+
+bootstrapIM.gaussian <- function(lm1, B, B2, cluster = NA, time = NA)
 {
     X <- model.matrix(lm1)
     y <- unname(lm1$y)
@@ -45,8 +49,8 @@ bootstrapIM.gaussian <- function(lm1, B, B2, cluster=NA, time=NA)
         bread <- -solve(vcov(lm1))
         bread2 <- t(X)%*%X
         breadratio <- -bread/bread2
-        plm1 <- plm(formula, data, model="within")
-        meat <- vcovSCCchange(plm1)*breadratio[1,1]^2
+        plm1 <- plm(formula, data, model = "within")
+        meat <- vcovSCCchange(plm1) * breadratio[1, 1]^2
         print(dim(bread))
         matri <- (nrow(X)^(-1/2))*(meat + bread[2:nrow(bread),2:nrow(bread)])
         Dhat <- diag(matri)

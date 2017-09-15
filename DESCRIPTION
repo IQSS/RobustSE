@@ -19,6 +19,7 @@ Suggests:
 Imports: 
     lmtest,
     car,
+    plm,
     sandwich,
     stats,
     maxLik,

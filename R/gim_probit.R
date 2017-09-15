@@ -1,3 +1,6 @@
+
+#' @importFrom utils setTxtProgressBar
+
 bootstrapIM.probit <- function(lm1, B, B2, cluster=NA, time=NA)
 {
     X <- model.matrix(lm1)
@@ -72,8 +75,6 @@ bootstrapIM.probit <- function(lm1, B, B2, cluster=NA, time=NA)
                 bread <- -solve(vcov(lm1B2))
                 DB[[j]] <- diag(nrow(X)^(-1/2)*(meat + bread))
             }
-
-
             DBbar <- DB[[j]] + DBbar
         }
 
