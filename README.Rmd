@@ -1,3 +1,18 @@
+---
+output: md_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(
+        stop_on_error = 2L
+)
+knitr::opts_chunk$set(
+        fig.path="man/figures/"
+)
+```
+
 # RobustSE
 
 [![Travis-CI Build Status](https://travis-ci.org/IQSS/RobustSE.svg?branch=master)](https://travis-ci.org/IQSS/RobustSE)
@@ -20,7 +35,7 @@ If the researcher believes it is appropriate to use cluster-robust standard erro
 
 ## Installation
 
-You can install RobustSE from github with:
+You can install RobustSE from Github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
@@ -32,13 +47,16 @@ devtools::install_github("IQSS/RobustSE")
 NOTE: In order for standard errors to be calcualted correctly GLM objects must be used.
 
 OLS with and without clustering
-```{r example}
+```{r load-packages, message=FALSE}
 # install.packages("Ecdat")
 library(Ecdat)
+library(RobustSE)
 data(Fatality)
+```
 
+```{r example-1}
 # ols modeling traffic fatality rate
-ols <- glm(mrall ~ beertax + factor(year), data=Fatality)
+ols <- glm(mrall ~ beertax + factor(year), data = Fatality)
 
 # Quick rule of thumb for model misspecification
 GIM(ols, full = FALSE)
